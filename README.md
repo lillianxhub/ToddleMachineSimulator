@@ -15,13 +15,13 @@ First, you'll need to write a program for the Toddler machine. Here's a simple e
 Create a new text file named `program.td` and add the following lines:
 
 ```
-(01) +850 INPUT 50
-(02) +851 INPUT 51
-(03) +150 LOAD 50
-(04) +351 ADD 51
-(05) +252 STORE 52
-(06) +952 OUTPUT 52
-(07) +500 HALT
+(01) +850 INPUT 50          ; Input first number into address 50
+(02) +851 INPUT 51          ; Input second number into address 51
+(03) +150 LOAD 50           ; Load the value at address 50 into AC
+(04) +351 ADD 51            ; Add the value at address 51 to AC
+(05) +252 STORE 52          ; Store the result from AC into address 52
+(06) +952 OUTPUT 52         ; Output the value stored in address 52
+(07) +500 HALT              ; Halt the machine
 ```
 
 Save this file as `program.td`.
@@ -35,7 +35,7 @@ Now, let's compile the simulator program. Assuming you have the source code for 
 3. Compile the program using `g++`:
 
     ```bash
-    g++ -o toddler_simulator toddler_simulator.cpp
+    g++ -o toddler_simulator main.cpp
     ```
 
 This command will create an executable file named `toddler_simulator`.
