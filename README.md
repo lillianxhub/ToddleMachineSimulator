@@ -91,7 +91,7 @@ A Toddler machine program consists of a sequence of instructions, where each ins
 ```
 ## Checklist
 
-- [ ] Basic Intruction
+- [x] Basic Intruction
 - [ ] Jump feature
 - [ ] Exended Intruction
 - [ ] Stack support
