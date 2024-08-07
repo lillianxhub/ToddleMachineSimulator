@@ -2,6 +2,8 @@
 #include <array>
 #include <fstream>
 #include <sstream>
+#include <string>
+#include <regex>
 
 // Constants
 const int MEMORY_SIZE = 100;
@@ -46,12 +48,22 @@ void loadProgram(const std::string &filename)
     std::string line;
     int address = 0;
 
+    // Regular expressions to extract instructions and variable assignments
+    std::regex instructionRegex(R"((?:\(\d+\))?\s*\+?(\d+))");
+    std::regex variableRegex(R"(\+0(\d{2})\s+(\d+))");
+
     while (std::getline(file, line) && address < MEMORY_SIZE)
     {
-        std::istringstream iss(line);
-        int instruction;
-        if (iss >> instruction)
+        std::smatch match;
+        if (std::regex_search(line, match, variableRegex))
         {
+            int varAddress = std::stoi(match[1].str());
+            int varValue = std::stoi(match[2].str());
+            memory[varAddress] = varValue;
+        }
+        else if (std::regex_search(line, match, instructionRegex))
+        {
+            int instruction = std::stoi(match[1].str());
             memory[address++] = instruction;
         }
     }
@@ -101,29 +113,41 @@ void executeInstruction(int opcode, int address)
     case 4: // SUB
         AC -= memory[address];
         break;
-    case 5: // HALT
-        std::cout << "Program halted." << std::endl;
-        exit(0);
+    case 5: // JUMP
+        PC = address;
+        break;
+    case 6: // JUMPZ
+        if (AC == 0)
+        {
+            PC = address;
+        }
+        break;
+    case 7: // JUMPN
+        if (AC < 0)
+        {
+            PC = address;
+        }
+        break;
     case 8: // INPUT
         std::cout << "Enter a value: ";
         std::cin >> memory[address];
         break;
     case 9: // OUTPUT
         std::cout << "Output: " << memory[address] << std::endl;
-        break;
-    // Implement other instructions here
+    case 500: // HALT
+        std::cout << "Program halted." << std::endl;
+        exit(0);
     default:
         std::cerr << "Invalid opcode!" << std::endl;
         exit(1);
     }
 }
 
-// Optional: Print the memory contents for debugging
+// Function to print the memory (optional, for debugging)
 void printMemory()
 {
-    std::cout << "Memory Dump:" << std::endl;
-    for (int i = 0; i < MEMORY_SIZE; i++)
+    for (int i = 0; i < MEMORY_SIZE; ++i)
     {
-        std::cout << i << ": " << memory[i] << std::endl;
+        std::cout << "Address " << i << ": " << memory[i] << std::endl;
     }
 }
