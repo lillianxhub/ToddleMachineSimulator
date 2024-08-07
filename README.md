@@ -95,3 +95,4 @@ A Toddler machine program consists of a sequence of instructions, where each ins
 - [ ] Jump feature
 - [ ] Exended Intruction
 - [ ] Stack support
+- [ ] UX/UI
